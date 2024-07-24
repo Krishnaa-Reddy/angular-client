@@ -4,6 +4,7 @@ import { BrnAccordionContentComponent } from '@spartan-ng/ui-accordion-brain';
 import { HlmAccordionDirective, HlmAccordionItemDirective, HlmAccordionTriggerDirective, HlmAccordionContentDirective, HlmAccordionIconDirective } from '@spartan-ng/ui-accordion-helm';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ import { HlmIconComponent } from '@spartan-ng/ui-icon-helm';
     HlmAccordionContentDirective,
     HlmAccordionIconDirective,
     HlmIconComponent,
+    DashboardComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

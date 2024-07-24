@@ -1,0 +1,93 @@
+<div class="flex flex-col justify-end gap-4 sm:flex-row">
+    <input hlmInput class="w-full md:w-80" placeholder="Filter emails..." [ngModel]="_problemFilter()"
+      (ngModelChange)="_rawFilterInput.set($event)" />
+  </div>
+  
+  <brn-table hlm stickyHeader class="border-border mt-4 block w-100 h-[450px] overflow-auto rounded-md border"
+    [dataSource]="_filteredSortedPaginatedPayments()" [displayedColumns]="_allDisplayedColumns()" [trackBy]="_trackBy">
+    <brn-column-def name="select" class="w-12 m-2">
+      <hlm-th *brnHeaderDef>
+        <hlm-checkbox [checked]="_checkboxState()" (changed)="handleHeaderCheckboxChange()" />
+      </hlm-th>
+      <hlm-td *brnCellDef="let element">
+        <hlm-checkbox [checked]="_isPaymentSelected(element)" (changed)="togglePayment(element)" />
+      </hlm-td>
+    </brn-column-def>
+    <brn-column-def name="difficulty" class="w-32 m-2 sm:w-40">
+      <hlm-th truncate *brnHeaderDef>Difficulty</hlm-th>
+      <hlm-td truncate *brnCellDef="let element">
+        <a target="_blank" href="#" hlmBadge class="min-w-28 justify-center" [variant]="
+            element.difficulty === 'easy'
+              ? 'default'
+              : element.difficulty === 'hard'
+              ? 'destructive'
+              : 'secondary'
+          ">{{ element.difficulty }}</a>
+      </hlm-td>
+    </brn-column-def>
+    <brn-column-def name="statement" class="m-2 flex justify-center w-2/4">
+      <hlm-th *brnHeaderDef>
+        <button hlmBtn size="sm" variant="ghost">
+          Problem Statement
+          <hlm-icon class="ml-3" size="sm" name="lucideArrowUpDown" />
+        </button>
+      </hlm-th>
+      <hlm-td truncate *brnCellDef="let element">
+        <div class="flex justify-center items-center">
+          {{ element.statement }}
+          <button mat-ripple [matRippleRadius]="12" [matRippleCentered]="true" mat-icon-button>
+            <mat-icon>open_in_new</mat-icon>
+          </button>
+        </div>
+      </hlm-td>
+    </brn-column-def>
+    <brn-column-def name="status" class="m-2 justify-end w-40">
+      <hlm-th *brnHeaderDef>Status</hlm-th>
+      <hlm-td class="font-medium tabular-nums" *brnCellDef="let element">
+        {{ element.status }}
+      </hlm-td>
+    </brn-column-def>
+    <brn-column-def name="actions" class="m-2 w-16">
+      <hlm-th *brnHeaderDef></hlm-th>
+      <hlm-td *brnCellDef="let element">
+        <button matTooltip="View Solution" [routerLink]="['problem', element.id]" hlmBtn variant="ghost"
+          class="h-6 w-6 p-0.5" align="end">
+          <hlm-icon class="w-4 h-4" name="lucideChevronRight" />
+        </button>
+      </hlm-td>
+    </brn-column-def>
+    <div class="flex items-center justify-center p-20 text-muted-foreground" brnNoDataRow>
+      No data
+    </div>
+  </brn-table>
+  <div class="flex flex-col justify-between mt-4 sm:flex-row sm:items-center" *brnPaginator="
+      let ctx;
+      totalElements: _totalElements();
+      pageSize: _pageSize();
+      onStateChange: _onStateChange
+    ">
+    <span class="text-muted-foreground text-sm">{{ _selected().length }} of {{ _totalElements() }} row(s) selected</span>
+    <div class="flex mt-2 sm:mt-0">
+      <brn-select class="inline-block" placeholder="{{ _availablePageSizes[0] }}" [(ngModel)]="_pageSize">
+        <hlm-select-trigger class="inline-flex mr-1 w-15 h-9">
+          <hlm-select-value />
+        </hlm-select-trigger>
+        <hlm-select-content>
+          @for (size of _availablePageSizes; track size) {
+          <hlm-option [value]="size">
+            {{ size === 10000 ? 'All' : size }}
+          </hlm-option>
+          }
+        </hlm-select-content>
+      </brn-select>
+  
+      <div class="flex space-x-1">
+        <button size="sm" variant="outline" hlmBtn [disabled]="!ctx.decrementable()" (click)="ctx.decrement()">
+          Previous
+        </button>
+        <button size="sm" variant="outline" hlmBtn [disabled]="!ctx.incrementable()" (click)="ctx.increment()">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>  

@@ -1,8 +1,11 @@
+@use "@angular/material" as mat;
 @import '@angular/cdk/overlay-prebuilt.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@include mat.core();
 
 :root {
 --font-sans: ''
@@ -52,3 +55,5 @@
 --input: 240 3.7% 15.9%;
 --ring: 240 4.9% 83.9%;
 }
+html, body { height: 100%; }
+body { margin: 0; }

@@ -1,0 +1,39 @@
+<section class="border-border m-2 p-4 text-center rounded-md border">
+    <div class="border-border mt-4 p-4 text-center rounded-md border">
+      <h1 class="text-4xl">Overall Progress: 50%</h1>
+    </div>
+    <main>
+      <div class="flex border-border mt-4 p-4 text-center rounded-md border">
+        <div class="w-64 px-2">
+          <h3 class="py-4 text-lg cursor-pointer" routerLink="/">
+            Nishant Chahar Sheet
+          </h3>
+          <div class="h-[80vh] overflow-auto flex flex-col w-[250px] space-y-2">
+            @if (_topics() === undefined ) {
+            <p class="mt-16">No Topics</p>
+            } @else if (_topics()?.length === 0) {
+            <p class="mt-16">
+              <hlm-spinner />
+            </p>
+            } @else { @for (topic of _topics(); track $index) {
+            <a
+              [routerLink]="['topic', topic.path]"
+              routerLinkActive="bg-muted/50"
+              class="cursor-pointer px-4 py-3 font-mono text-sm border rounded-md border-border hover:bg-muted/50"
+              >{{ topic.title }}</a
+            >
+            } }
+          </div>
+        </div>
+        <div class="mx-4" style="width: -webkit-fill-available">
+          <h3></h3>
+          <h1 *ngIf="_topic()" class="text-4xl">
+            Progress in `{{ _topic() }}`: 50%
+          </h1>
+          <div class="border-border mt-4 p-4 rounded-md border">
+            <router-outlet></router-outlet>
+          </div>
+        </div>
+      </div>
+    </main>
+  </section>  

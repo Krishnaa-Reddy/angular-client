@@ -1,0 +1,77 @@
+
+<section class="flex justify-between mb-3">
+    <div class="flex">
+        <div class="mr-2">
+            <button matTooltip="Prev Topic" [routerLink]="['problem']" hlmBtn variant="ghost" class="h-6 w-6 p-0.5 hover:bg-muted/50" align="end">
+                <hlm-icon class="w-5 h-5" name="lucideChevronsLeft" />
+              </button>
+        </div>
+        <div>
+            <button matTooltip="Prev Problem" [routerLink]="['problem']" hlmBtn variant="ghost" class="h-6 w-6 p-0.5 hover:bg-muted/50" align="end">
+                <hlm-icon class="w-4 h-4" name="lucideChevronLeft" />
+              </button>
+        </div>
+    </div>
+    <mat-chip>problem-content works! - {{problem$ | async}}</mat-chip>
+    <div class="flex">
+        <div class="mr-2">
+            <button matTooltip="Next Problem" [routerLink]="['problem']" hlmBtn variant="ghost" class="h-6 w-6 p-0.5 hover:bg-muted/50" align="end">
+                <hlm-icon class="w-4 h-4" name="lucideChevronRight" />
+              </button>
+        </div>
+        <div>
+            <button matTooltip="Next Topic" [routerLink]="['problem']" hlmBtn variant="ghost" class="h-6 w-6 p-0.5 hover:bg-muted/50" align="end">
+                <hlm-icon class="w-5 h-5" name="lucideChevronsRight" />
+              </button>
+        </div>
+    </div>
+    </section>
+    
+    <section class="min-h-80">
+        <div class="h-[600px]">
+            <as-split gutterSize="6" direction="horizontal">
+              <as-split-area minSize="40" [size]="50">
+                <mat-card class="items-center m-1 h-[-webkit-fill-available]">
+                    <mat-card-header>
+                      <div mat-card-avatar class="example-header-image"></div>
+                      <mat-card-title>Shiba Inu</mat-card-title>
+                      <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                    </mat-card-header>
+                    <img mat-card-image width="440" src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+                    <mat-card-content>
+                      <p>
+                        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                        bred for hunting.
+                      </p>
+                    </mat-card-content>
+                    <mat-card-actions>
+                      <button mat-button>LIKE</button>
+                      <button mat-button>SHARE</button>
+                    </mat-card-actions>
+                  </mat-card>
+              </as-split-area>
+              <as-split-area minSize="40" [size]="50">
+                <mat-card class="items-center m-1 h-[-webkit-fill-available]">
+                    <mat-card-header>
+                      <div mat-card-avatar class="example-header-image"></div>
+                      <mat-card-title>Shiba Inu</mat-card-title>
+                      <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+                    </mat-card-header>
+                    <img mat-card-image width="440" src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+                    <mat-card-content>
+                      <p>
+                        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                        bred for hunting.
+                      </p>
+                    </mat-card-content>
+                    <mat-card-actions>
+                      <button mat-button>LIKE</button>
+                      <button mat-button>SHARE</button>
+                    </mat-card-actions>
+                  </mat-card>
+              </as-split-area>
+            </as-split>
+          </div>
+    </section>
