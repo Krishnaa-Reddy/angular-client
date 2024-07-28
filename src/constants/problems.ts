@@ -1,26 +1,8 @@
-export type Problem = {
-    id: string;
-    difficulty: 'hard' | 'medium' | 'easy';
-    status: 'solved' | 'pending' | 'unattempted';
-    statement: string;
-    solution?: Solution[];
-    url?: string | string[];
-    topics?: string | string[];
-    companiesAsked?: string[];
-  };
-  
-  export type Solution = {
-    approach: 'approach-1' | 'approach-2' | 'approach-3';
-    algorithm: string;
-    images: string[];
-  };
-  
-  export type DSASheet = {
-    topics: string[];
-    problems: Problem[];
-  };
-  
-  export const PROBLEMS_LIST: Problem[] = [
+import { DSASheet, Problem, ProblemStatus } from "../types/problem.type";
+
+export const STATUSES : ProblemStatus[] =  ['solved', 'attempted', 'unattempted'];
+
+export const PROBLEMS_LIST: Problem[] = [
     {
       id: '1',
       difficulty: 'easy',
@@ -50,7 +32,7 @@ export type Problem = {
     {
       id: '2',
       difficulty: 'medium',
-      status: 'pending',
+      status: 'attempted',
       statement: 'Add Two Numbers',
       url: 'https://leetcode.com/problems/add-two-numbers',
       topics: ['Linked List', 'Math'],
@@ -119,7 +101,7 @@ export type Problem = {
     {
       id: '6',
       difficulty: 'medium',
-      status: 'pending',
+      status: 'attempted',
       statement: 'ZigZag Conversion',
       url: 'https://leetcode.com/problems/zigzag-conversion',
       topics: ['String'],
@@ -183,7 +165,7 @@ export type Problem = {
     {
       id: '10',
       difficulty: 'hard',
-      status: 'pending',
+      status: 'attempted',
       statement: 'Regular Expression Matching',
       url: 'https://leetcode.com/problems/regular-expression-matching',
       topics: ['String', 'Dynamic Programming'],
@@ -247,7 +229,7 @@ export type Problem = {
     {
       id: '14',
       difficulty: 'easy',
-      status: 'pending',
+      status: 'attempted',
       statement: 'Longest Common Prefix',
       url: 'https://leetcode.com/problems/longest-common-prefix',
       topics: ['String'],
@@ -295,7 +277,7 @@ export type Problem = {
     {
       id: '17',
       difficulty: 'medium',
-      status: 'pending',
+      status: 'attempted',
       statement: 'Letter Combinations of a Phone Number',
       url: 'https://leetcode.com/problems/letter-combinations-of-a-phone-number',
       topics: ['String', 'Backtracking'],
@@ -396,7 +378,7 @@ export type Problem = {
     {
       id: '23',
       difficulty: 'hard',
-      status: 'pending',
+      status: 'attempted',
       statement: 'Merge k Sorted Lists',
       url: 'https://leetcode.com/problems/merge-k-sorted-lists',
       topics: ['Linked List', 'Divide and Conquer', 'Heap'],

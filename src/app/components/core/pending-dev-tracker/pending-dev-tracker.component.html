@@ -1,0 +1,36 @@
+<hlm-dialog>
+    <button id="edit-profile" brnDialogTrigger hlmBtn>See What's Cooking</button>
+    <hlm-dialog-content style="width: 32rem;" *brnDialogContent="let ctx">
+      <hlm-dialog-header>
+        <h3 hlmDialogTitle>Tasks Going On</h3>
+        <p hlmDialogDescription>Keep track of what is actively going on with your developement process</p>
+      </hlm-dialog-header>
+      <hlm-table class="w-full min-w-[400px] h-72 overflow-auto scrollbar-thin">
+        <hlm-caption>A list of my recent tasks.</hlm-caption>
+        <hlm-trow>
+          <hlm-th class="w-[22rem]">Task</hlm-th>
+          <hlm-th class="w-6">Status</hlm-th>
+        </hlm-trow>
+        @for (taskUpdated of _tasksUpdated; track taskUpdated.task) {
+          <hlm-trow>
+            <hlm-td truncate class="font-medium w-[22rem]">
+                <p matTooltipPosition="above" class="w-fit" [matTooltip]="taskUpdated.task.task" matTooltipClass="task-tooltip">{{taskUpdated.task.task}}</p>
+            </hlm-td>
+            <hlm-td class="w-6">
+                <div class="flex items-center gap-1">
+                    <hlm-icon
+                    [matTooltip]="taskUpdated.task.status"
+                    class="w-4 h-4"
+                    [class]="taskUpdated.statusTemplate.hexClass"
+                    [name]="taskUpdated.statusTemplate.icon"
+                  />
+                    {{ taskUpdated.statusTemplate.status }}
+                </div>
+
+            </hlm-td>
+          </hlm-trow>
+        }
+      </hlm-table>
+    </hlm-dialog-content>
+  </hlm-dialog>
+`

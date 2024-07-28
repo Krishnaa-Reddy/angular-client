@@ -1,14 +1,25 @@
-import { MatButtonModule } from '@angular/material/button';
-import { AsyncPipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { ActivatedRoute, ActivationStart, Router, RouterLink } from '@angular/router';
-import { BehaviorSubject, filter, tap, map } from 'rxjs';
+import { AsyncPipe, JsonPipe, NgIf, TitleCasePipe } from '@angular/common';
+import { Component, Input, computed, inject } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
+import {
+  lucideBadgeCheck,
+  lucideBan,
+  lucideChevronLeft,
+  lucideChevronRight,
+  lucideChevronsLeft,
+  lucideChevronsRight,
+  lucideClock2,
+} from '@ng-icons/lucide';
 import { HlmIconComponent, provideIcons } from '@spartan-ng/ui-icon-helm';
-import { lucideChevronRight, lucideChevronLeft, lucideChevronsLeft, lucideChevronsRight } from '@ng-icons/lucide';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {MatCardModule} from '@angular/material/card';
+import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { AngularSplitModule } from 'angular-split';
-import {MatChipsModule} from '@angular/material/chips';
+import { DsaServerService } from '../../../services/dsa-server.service';
+import { Problem, ProblemContent } from '../../../../types/problem.type';
+
+
 
 @Component({
   selector: 'app-problem-content',
@@ -21,31 +32,39 @@ import {MatChipsModule} from '@angular/material/chips';
     AngularSplitModule,
     MatCardModule,
     MatChipsModule,
-    MatChipsModule
+    MatChipsModule,
+    JsonPipe,
+    TitleCasePipe,
+    HlmSpinnerComponent,
+    NgIf,
   ],
-  providers: [provideIcons({ lucideChevronsLeft, lucideChevronLeft, lucideChevronRight, lucideChevronsRight })],
+  providers: [
+    provideIcons({
+      lucideChevronsLeft,
+      lucideChevronLeft,
+      lucideChevronRight,
+      lucideChevronsRight,
+      lucideBadgeCheck,
+      lucideClock2,
+      lucideBan,
+    }),
+  ],
   templateUrl: './problem-content.component.html',
-  styleUrl: './problem-content.component.scss'
+  styleUrl: './problem-content.component.scss',
 })
-export class ProblemContentComponent implements OnInit {
+export class ProblemContentComponent {
+  @Input() id!: string;
 
-
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-
-  problem = new BehaviorSubject<string | null>(null);
-  problem$ = this.problem.asObservable();
-
-  ngOnInit(): void {
-    this.router.events.pipe(
-      filter((event): event is ActivationStart => event instanceof ActivationStart),
-      map(e => e.snapshot.params['id']),
-      filter(topic => topic && topic != ''),
-      tap(topic => this.problem.next(topic))
-    ).subscribe();
-    this.route.paramMap.subscribe(params => {
-      this.problem.next(params.get('id') ?? '');
-    });
-  }
-
+  private _service = inject(DsaServerService);
+  protected curRoute$ = this._service.topic$;
+  protected prob = computed(() => {
+    const problems = this._service._problems();
+    if (problems) {
+      const prob = problems.find((p) => p.id === this.id);
+      return prob
+        ? <ProblemContent>{ problem: prob, status: 'loaded' }
+        : <ProblemContent>{ status: 'no-data' };
+    }
+    return <ProblemContent>{ status: problems };
+  });
 }

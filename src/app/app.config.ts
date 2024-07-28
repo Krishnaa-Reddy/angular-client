@@ -1,10 +1,19 @@
 import { ApplicationConfig } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideClientHydration } from '@angular/platform-browser';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+import { ValidTopicGuard } from '../guards/valid-topic.guard';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes), provideAnimationsAsync(), provideHttpClient(withFetch())]
+  providers: [
+    ValidTopicGuard,
+    provideRouter(routes, withViewTransitions(), withComponentInputBinding()),
+    provideAnimationsAsync(),
+    provideHttpClient(withFetch()),
+    provideCharts(withDefaultRegisterables())
+  ]
 };

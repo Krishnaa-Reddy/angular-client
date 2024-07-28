@@ -1,77 +1,89 @@
+<div class="min-h-32 content-center">
+  @if (prob().status === 'loaded') {
 
-<section class="flex justify-between mb-3">
-    <div class="flex">
-        <div class="mr-2">
-            <button matTooltip="Prev Topic" [routerLink]="['problem']" hlmBtn variant="ghost" class="h-6 w-6 p-0.5 hover:bg-muted/50" align="end">
-                <hlm-icon class="w-5 h-5" name="lucideChevronsLeft" />
-              </button>
-        </div>
-        <div>
-            <button matTooltip="Prev Problem" [routerLink]="['problem']" hlmBtn variant="ghost" class="h-6 w-6 p-0.5 hover:bg-muted/50" align="end">
-                <hlm-icon class="w-4 h-4" name="lucideChevronLeft" />
-              </button>
-        </div>
+  <section class="flex justify-between mb-3">
+    <a
+      [routerLink]="['/topic', curRoute$ | async]"
+      [matTooltip]="'Back'"
+      hlmBtn
+      variant="ghost"
+      class="h-6 w-6 p-0.5 hover:bg-muted/50"
+      align="end"
+    >
+      <hlm-icon class="w-5 h-5" name="lucideChevronsLeft" />
+    </a>
+    <mat-chip>{{ prob().problem?.statement }}</mat-chip>
+    <div class="flex gap-1">
+      <hlm-icon
+        matTooltip="solved"
+        class="w-5 h-5 text-[#4dbf42]"
+        name="lucideBadgeCheck"
+      />
+      <hlm-icon
+        matTooltip="pending"
+        class="w-5 h-5 text-[#ffcd56]"
+        name="lucideClock2"
+      />
+      <hlm-icon
+        matTooltip="unattempted"
+        class="w-5 h-5 text-[#ee564e]"
+        name="lucideBan"
+      />
     </div>
-    <mat-chip>problem-content works! - {{problem$ | async}}</mat-chip>
-    <div class="flex">
-        <div class="mr-2">
-            <button matTooltip="Next Problem" [routerLink]="['problem']" hlmBtn variant="ghost" class="h-6 w-6 p-0.5 hover:bg-muted/50" align="end">
-                <hlm-icon class="w-4 h-4" name="lucideChevronRight" />
-              </button>
-        </div>
-        <div>
-            <button matTooltip="Next Topic" [routerLink]="['problem']" hlmBtn variant="ghost" class="h-6 w-6 p-0.5 hover:bg-muted/50" align="end">
-                <hlm-icon class="w-5 h-5" name="lucideChevronsRight" />
-              </button>
-        </div>
+  </section>
+
+  <section class="min-h-80">
+    <div class="h-[478px]">
+      <as-split gutterSize="6" direction="horizontal">
+        <as-split-area minSize="40" [size]="50">
+          <mat-card class="m-1 h-[-webkit-fill-available]">
+            <mat-card-header>
+              <div mat-card-avatar class="example-header-image"></div>
+              <mat-card-title>Approach</mat-card-title>
+              <!-- <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex flex-col gap-4">
+                @for (sol of prob().problem?.solution; track $index) {
+                <div class="text-justify">
+                  <h5 class="font-medium text-2xl">
+                    {{ sol.approach | titlecase }}
+                  </h5>
+                  <code>
+                    {{ sol.algorithm }}
+                  </code>
+                </div>
+                }
+              </div>
+            </mat-card-content>
+            <!-- <mat-card-actions>
+                  <button mat-button>LIKE</button>
+                  <button mat-button>SHARE</button>
+                </mat-card-actions> -->
+          </mat-card>
+        </as-split-area>
+        <as-split-area minSize="40" [size]="50">
+          <mat-card class="items-center m-1 h-[-webkit-fill-available]">
+            <mat-card-header>
+              <div mat-card-avatar class="example-header-image"></div>
+              <mat-card-title>Solution</mat-card-title>
+              <!-- <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
+            </mat-card-header>
+            <img
+              mat-card-image
+              width="360"
+              src="../../../../assets/solutions/carbon.png"
+              alt="Photo of a Shiba Inu"
+            />
+          </mat-card>
+        </as-split-area>
+      </as-split>
     </div>
-    </section>
-    
-    <section class="min-h-80">
-        <div class="h-[600px]">
-            <as-split gutterSize="6" direction="horizontal">
-              <as-split-area minSize="40" [size]="50">
-                <mat-card class="items-center m-1 h-[-webkit-fill-available]">
-                    <mat-card-header>
-                      <div mat-card-avatar class="example-header-image"></div>
-                      <mat-card-title>Shiba Inu</mat-card-title>
-                      <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-                    </mat-card-header>
-                    <img mat-card-image width="440" src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-                    <mat-card-content>
-                      <p>
-                        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                        bred for hunting.
-                      </p>
-                    </mat-card-content>
-                    <mat-card-actions>
-                      <button mat-button>LIKE</button>
-                      <button mat-button>SHARE</button>
-                    </mat-card-actions>
-                  </mat-card>
-              </as-split-area>
-              <as-split-area minSize="40" [size]="50">
-                <mat-card class="items-center m-1 h-[-webkit-fill-available]">
-                    <mat-card-header>
-                      <div mat-card-avatar class="example-header-image"></div>
-                      <mat-card-title>Shiba Inu</mat-card-title>
-                      <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-                    </mat-card-header>
-                    <img mat-card-image width="440" src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-                    <mat-card-content>
-                      <p>
-                        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                        A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                        bred for hunting.
-                      </p>
-                    </mat-card-content>
-                    <mat-card-actions>
-                      <button mat-button>LIKE</button>
-                      <button mat-button>SHARE</button>
-                    </mat-card-actions>
-                  </mat-card>
-              </as-split-area>
-            </as-split>
-          </div>
-    </section>
+  </section>
+
+  } @else if(prob().status === 'no-data') {
+  <p>No data available</p>
+  } @else {
+  <hlm-spinner />
+  }
+</div>

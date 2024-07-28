@@ -9,7 +9,7 @@ import {
   NgFor,
   NgIf,
 } from '@angular/common';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { HlmButtonDirective } from '@spartan-ng/ui-button-helm';
 import {
   BrnCollapsibleComponent,
@@ -19,6 +19,9 @@ import {
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { DsaServerService } from '../../services/dsa-server.service';
 import { RoutingService } from '../../services/routing.service';
+import { ChartComponent } from '../../shared/chart/chart.component';
+import { IntroMessageComponent } from '../../shared/intro-message/intro-message.component';
+import { filter } from 'rxjs';
 
 export interface TopicRoute {
   path: string;
@@ -44,6 +47,8 @@ export interface TopicRoute {
     NgFor,
     BrnCollapsibleContentComponent,
     HlmSpinnerComponent,
+    ChartComponent,
+    IntroMessageComponent
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss',
@@ -51,12 +56,22 @@ export interface TopicRoute {
 export class DashboardComponent {
   private readonly _service = inject(DsaServerService);
   private readonly _router = inject(RoutingService);
+  protected readonly home$ = this._router.homeRoute$;
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+
+  dataSet = [324, 34, 345];
+  total = 150;
+  done = 2;
+  title = 'Overall Progress';
 
   protected readonly _topics = this._service._topics;
-  protected readonly _topic = computed(() => {
-    console.log(this._topics());
-    return this._topics()?.find(
-      (t: TopicRoute) => t.path === this._router._topic()
-    )?.title;
-  });
+  protected readonly _topic = this._service._topicRoute;
+
+
+  // constructor() {
+  //   this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(e => {
+  //     console.log(this.route);
+  //   });
+  // }
 }

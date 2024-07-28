@@ -1,0 +1,29 @@
+@if (title()) {
+    <div
+      class="flex items-center justify-center text-center dsa-border"
+    >
+      <h1 [ngClass]="titleSizeClass()">{{ title() }}:</h1>
+      @if (isBrowser) {
+      <div style="position: relative">
+        <h5
+          [ngClass]="[top(), left(), fontSizeClass()]"
+          class="absolute -z-10 font-semibold text-slate-700"
+          style="position: absolute"
+        >
+          0/{{total()}}
+        </h5>
+        <canvas
+          [width]="width()"
+          baseChart
+          [labels]="doughnutChartLabels"
+          [datasets]="doughnutChartDatasets$()"
+          [options]="doughnutChartOptions()"
+          [type]="'doughnut'"
+        >
+        </canvas>
+      </div>
+    
+      }
+    </div>
+    }
+    

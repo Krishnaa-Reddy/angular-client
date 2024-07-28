@@ -1,6 +1,8 @@
 import { Route } from '@angular/router';
+import { ValidTopicGuard } from '../guards/valid-topic.guard';
+import { ProblemsComponent } from './components/dashboard/problems/problems.component';
 
-// lazy-load standalone component
+// lazy-load standalone components
 export const routes: Route[] = [
   {
     path: 'topic',
@@ -9,9 +11,10 @@ export const routes: Route[] = [
         path: '',
         pathMatch: 'full',
         loadComponent: () =>
-          import('./components/dashboard/home/home.component').then(
-            (mod) => mod.HomeComponent
+          import('./components/dashboard/problems/problems.component').then(
+            (mod) => mod.ProblemsComponent
           ),
+        canActivate: [ValidTopicGuard]
       },
       {
         path: ':topic-name',
@@ -19,6 +22,7 @@ export const routes: Route[] = [
           import('./components/dashboard/problems/problems.component').then(
             (mod) => mod.ProblemsComponent
           ),
+        canActivate: [ValidTopicGuard]
       },
       {
         path: ':topic-name/problem/:id',
@@ -33,10 +37,7 @@ export const routes: Route[] = [
   {
     path: '',
     pathMatch: 'full',
-    loadComponent: () =>
-      import('./components/dashboard/home/home.component').then(
-        (mod) => mod.HomeComponent
-      ),
+    redirectTo: 'topic'
   },
   {
     path: '**',

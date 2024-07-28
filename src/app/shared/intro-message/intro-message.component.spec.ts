@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DoughnutComponent } from './doughnut.component';
+import { IntroMessageComponent } from './intro-message.component';
 
-describe('DoughnutComponent', () => {
-  let component: DoughnutComponent;
-  let fixture: ComponentFixture<DoughnutComponent>;
+describe('IntroMessageComponent', () => {
+  let component: IntroMessageComponent;
+  let fixture: ComponentFixture<IntroMessageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DoughnutComponent]
+      imports: [IntroMessageComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DoughnutComponent);
+    fixture = TestBed.createComponent(IntroMessageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

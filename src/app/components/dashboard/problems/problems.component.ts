@@ -2,14 +2,16 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import {
   Component,
+  Input,
   TrackByFunction,
+  ViewChild,
   computed,
   effect,
   inject,
   signal,
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatRippleModule } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -31,7 +33,7 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { RouterLink } from '@angular/router';
 import { HlmBadgeDirective } from '@spartan-ng/ui-badge-helm';
 import { BrnSelectModule } from '@spartan-ng/ui-select-brain';
-import { HlmSelectModule } from '@spartan-ng/ui-select-helm';
+import { HlmSelectContentDirective, HlmSelectModule } from '@spartan-ng/ui-select-helm';
 import {
   BrnTableModule,
   PaginatorState,
@@ -39,42 +41,21 @@ import {
 } from '@spartan-ng/ui-table-brain';
 import { HlmTableModule } from '@spartan-ng/ui-table-helm';
 import { debounceTime, map } from 'rxjs';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-// import { DsaServerService } from 'src/app/services/dsa-server.service';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-// import { RoutingService } from 'src/app/services/routing.service';
 import { TopicRoute } from '../dashboard.component';
+import {
+  RoutingService,
+} from '../../../services/routing.service';
 import { DsaServerService } from '../../../services/dsa-server.service';
-import { RoutingService } from '../../../services/routing.service';
-
-export type Problem = {
-  id: string;
-  difficulty: 'hard' | 'medium' | 'easy';
-  status: 'solved' | 'pending' | 'unattempted';
-  statement: string;
-  solution?: Solution[];
-  url?: string | string[];
-  topics?: string | string[];
-  companiesAsked?: string[];
-};
-
-export type Solution = {
-  approach: 'approach-1' | 'approach-2' | 'approach-3';
-  algorithm: string;
-  images: string[];
-};
+import { Problem, ProblemStatus } from '../../../../types/problem.type';
+import { STATUSES } from '../../../../constants/problems';
+import { ChartComponent } from '../../../shared/chart/chart.component';
 
 // Most important!!!!!!!!!: Use signals as much as you can
 ///// And, Deplpoy the code first before you plan any new advancements or features
 
 // TODO: Sorting not working look at it.
-// TODO: Problem content - add left: solution pane & right: code snipper pane - draggable panes
-// TODO: give user a choice to move panes left-right or top-bottom
-// TODO: Introduce images
-// TODO: Make next & prev buttons work
-// TODO: Bring in pie charts
-
-/// TODO: Structure reuseful tailwind css classes
+// PARTIALLY_DONE: Introduce images
+// PARTIALLY_DONE: Make next & prev buttons work - not good, only back
 
 // Backend:
 // 0. Started with hard-coded data in the backend
@@ -106,6 +87,8 @@ export type Solution = {
     BrnSelectModule,
     HlmSelectModule,
     MatTooltipModule,
+    ReactiveFormsModule,
+    ChartComponent
   ],
   providers: [
     provideIcons({
@@ -120,6 +103,7 @@ export type Solution = {
   styleUrl: './problems.component.scss',
 })
 export class ProblemsComponent {
+
   private readonly _router = inject(RoutingService);
   private readonly _service = inject(DsaServerService);
 
@@ -129,12 +113,14 @@ export class ProblemsComponent {
     toObservable(this._rawFilterInput).pipe(debounceTime(300))
   );
 
+  protected readonly statuses = STATUSES;
+
   private readonly _displayedIndices = signal({ start: 0, end: 0 });
   protected readonly _availablePageSizes = [5, 10, 20, 100];
   protected readonly _pageSize = signal(this._availablePageSizes[0]);
 
   private readonly _selectionModel = new SelectionModel<Problem>(true);
-  protected readonly _isPaymentSelected = (problem: Problem) =>
+  protected readonly _isProblemSelected = (problem: Problem) =>
     this._selectionModel.isSelected(problem);
   protected readonly _selected = toSignal(
     this._selectionModel.changed.pipe(map((change) => change.source.selected)),
@@ -154,10 +140,9 @@ export class ProblemsComponent {
     'actions',
   ]);
 
-  private readonly _problems = signal<Problem[]>([]);
-
-  private readonly topic$ = this._router.topic$;
-  private readonly _topic = toSignal(this.topic$, { initialValue: 'no-data' });
+  public readonly _problems = signal<Problem[]>([]);
+  private readonly _topic = this._router._topic;
+  protected topicTitle = signal<string | undefined>(undefined);
 
   private readonly _filteredProblems = computed(() => {
     const problemFilter = this._problemFilter()?.trim()?.toLowerCase();
@@ -169,7 +154,7 @@ export class ProblemsComponent {
     return this._problems();
   });
   private readonly _problemSort = signal<'ASC' | 'DESC' | null>(null);
-  protected readonly _filteredSortedPaginatedPayments = computed(() => {
+  protected readonly _filteredSortedPaginatedProblems = computed(() => {
     const sort = this._problemSort();
     const start = this._displayedIndices().start;
     const end = this._displayedIndices().end + 1;
@@ -184,15 +169,15 @@ export class ProblemsComponent {
       )
       .slice(start, end);
   });
-  protected readonly _allFilteredPaginatedPaymentsSelected = computed(() =>
-    this._filteredSortedPaginatedPayments().every((problem) =>
+  protected readonly _allFilteredPaginatedProblemsSelected = computed(() =>
+    this._filteredSortedPaginatedProblems().every((problem) =>
       this._selected().includes(problem)
     )
   );
   protected readonly _checkboxState = computed(() => {
     const noneSelected = this._selected().length === 0;
     const allSelectedOrIndeterminate =
-      this._allFilteredPaginatedPaymentsSelected() ? true : 'indeterminate';
+      this._allFilteredPaginatedProblemsSelected() ? true : 'indeterminate';
     return noneSelected ? false : allSelectedOrIndeterminate;
   });
 
@@ -210,47 +195,39 @@ export class ProblemsComponent {
     this._displayedIndices.set({ start: startIndex, end: endIndex });
 
   constructor() {
-    // needed to sync the debounced filter to the name filter, but being able to override the
-    // filter when loading new users without debounce
     effect(() => this._problemFilter.set(this._debouncedFilter() ?? ''), {
       allowSignalWrites: true,
     });
+
     effect(
       () => {
         const topic = this._service
           ._topics()
           ?.find((t: TopicRoute) => t.path === this._topic());
-        this._problems.set(
-          this._service
-            ._problems()
-            ?.filter((p) => p.topics?.includes(topic?.title ?? ''))
-        );
+
+          this.topicTitle.set(topic?.title);
+
+          const problems = this._service._problems();
+        if(problems){
+            this._problems.set(
+              problems.filter((p) => p.topics?.includes(topic?.title ?? ''))
+            );
+        }
       },
       { allowSignalWrites: true }
     );
   }
 
-  protected togglePayment(problem: Problem) {
+  protected toggleProblem(problem: Problem) {
     this._selectionModel.toggle(problem);
   }
 
   protected handleHeaderCheckboxChange() {
     const previousCbState = this._checkboxState();
     if (previousCbState === 'indeterminate' || !previousCbState) {
-      this._selectionModel.select(...this._filteredSortedPaginatedPayments());
+      this._selectionModel.select(...this._filteredSortedPaginatedProblems());
     } else {
-      this._selectionModel.deselect(...this._filteredSortedPaginatedPayments());
-    }
-  }
-
-  protected handleEmailSortChange() {
-    const sort = this._problemSort();
-    if (sort === 'ASC') {
-      this._problemSort.set('DESC');
-    } else if (sort === 'DESC') {
-      this._problemSort.set(null);
-    } else {
-      this._problemSort.set('ASC');
+      this._selectionModel.deselect(...this._filteredSortedPaginatedProblems());
     }
   }
 }
