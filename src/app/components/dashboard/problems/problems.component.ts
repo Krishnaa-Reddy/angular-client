@@ -2,13 +2,13 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import {
   Component,
-  Input,
+  Signal,
   TrackByFunction,
-  ViewChild,
   computed,
   effect,
   inject,
-  signal,
+  input,
+  signal
 } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -33,7 +33,7 @@ import { HlmInputDirective } from '@spartan-ng/ui-input-helm';
 import { RouterLink } from '@angular/router';
 import { HlmBadgeDirective } from '@spartan-ng/ui-badge-helm';
 import { BrnSelectModule } from '@spartan-ng/ui-select-brain';
-import { HlmSelectContentDirective, HlmSelectModule } from '@spartan-ng/ui-select-helm';
+import { HlmSelectModule } from '@spartan-ng/ui-select-helm';
 import {
   BrnTableModule,
   PaginatorState,
@@ -41,14 +41,10 @@ import {
 } from '@spartan-ng/ui-table-brain';
 import { HlmTableModule } from '@spartan-ng/ui-table-helm';
 import { debounceTime, map } from 'rxjs';
-import { TopicRoute } from '../dashboard.component';
-import {
-  RoutingService,
-} from '../../../services/routing.service';
-import { DsaServerService } from '../../../services/dsa-server.service';
-import { Problem, ProblemStatus } from '../../../../types/problem.type';
 import { STATUSES } from '../../../../constants/problems';
-import { ChartComponent } from '../../../shared/chart/chart.component';
+import { Problem } from '../../../../types/problem.type';
+import { DsaServerService } from '../../../services/dsa-server.service';
+import { ChartComponent } from '../../shared/chart/chart.component';
 
 // Most important!!!!!!!!!: Use signals as much as you can
 ///// And, Deplpoy the code first before you plan any new advancements or features
@@ -103,8 +99,7 @@ import { ChartComponent } from '../../../shared/chart/chart.component';
   styleUrl: './problems.component.scss',
 })
 export class ProblemsComponent {
-
-  private readonly _router = inject(RoutingService);
+  protected readonly 'topic-name' = input(undefined);
   private readonly _service = inject(DsaServerService);
 
   protected readonly _rawFilterInput = signal('');
@@ -139,10 +134,17 @@ export class ProblemsComponent {
     ...this._brnColumnManager.displayedColumns(),
     'actions',
   ]);
+  
+  _topicWiseProblems : Signal<{topic: string | undefined, problems: Problem[]}> = computed(() => {
+    const topic = this._service._topicRoute()?.title
+    return {
+      topic,
+      problems: this._service._problems()?.filter((p) => p.topics?.includes(topic ?? '')) ?? []
+    }
+    
+  })
 
-  public readonly _problems = signal<Problem[]>([]);
-  private readonly _topic = this._router._topic;
-  protected topicTitle = signal<string | undefined>(undefined);
+  protected readonly _problems = computed(() => this._topicWiseProblems().problems);
 
   private readonly _filteredProblems = computed(() => {
     const problemFilter = this._problemFilter()?.trim()?.toLowerCase();
@@ -199,23 +201,8 @@ export class ProblemsComponent {
       allowSignalWrites: true,
     });
 
-    effect(
-      () => {
-        const topic = this._service
-          ._topics()
-          ?.find((t: TopicRoute) => t.path === this._topic());
+    effect(() => this._service._topic.set(this['topic-name']()), {allowSignalWrites: true});
 
-          this.topicTitle.set(topic?.title);
-
-          const problems = this._service._problems();
-        if(problems){
-            this._problems.set(
-              problems.filter((p) => p.topics?.includes(topic?.title ?? ''))
-            );
-        }
-      },
-      { allowSignalWrites: true }
-    );
   }
 
   protected toggleProblem(problem: Problem) {

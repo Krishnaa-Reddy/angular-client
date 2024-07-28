@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { PendingDevTrackerComponent } from '../../components/core/pending-dev-tracker/pending-dev-tracker.component';
+import { PendingDevTrackerComponent } from '../../../components/core/pending-dev-tracker/pending-dev-tracker.component';
 
 @Component({
   selector: 'app-intro-message',

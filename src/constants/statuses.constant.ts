@@ -1,5 +1,7 @@
 import { TaskStatus, StatusTemplate } from "../types/dev-tasks.type";
 
+// TODO: Handle the colors and statuses here to increas reusability
+
 export const statusTemplates : Record<TaskStatus, StatusTemplate> = {
     'TODO' : {
       status: 'Todo',

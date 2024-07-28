@@ -3,7 +3,7 @@ import { Component, Input, computed, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   lucideBadgeCheck,
   lucideBan,
@@ -17,7 +17,7 @@ import { HlmIconComponent, provideIcons } from '@spartan-ng/ui-icon-helm';
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { AngularSplitModule } from 'angular-split';
 import { DsaServerService } from '../../../services/dsa-server.service';
-import { Problem, ProblemContent } from '../../../../types/problem.type';
+import { Problem } from '../../../../types/problem.type';
 
 
 
@@ -56,15 +56,12 @@ export class ProblemContentComponent {
   @Input() id!: string;
 
   private _service = inject(DsaServerService);
-  protected curRoute$ = this._service.topic$;
+  private route = inject(ActivatedRoute);
+  protected readonly backTo = this.route.snapshot.params['topic-name'];
+
   protected prob = computed(() => {
-    const problems = this._service._problems();
-    if (problems) {
-      const prob = problems.find((p) => p.id === this.id);
-      return prob
-        ? <ProblemContent>{ problem: prob, status: 'loaded' }
-        : <ProblemContent>{ status: 'no-data' };
-    }
-    return <ProblemContent>{ status: problems };
+    // TODO: Maybe you might be creating a separate end-point to fetch each solution from server
+    /// So, this response will have few more attributes(eg: status: Loading, Loaded, Errored) to handle template state
+    return this._service._problems()?.find(p => p.id === this.id)
   });
 }

@@ -1,9 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, GuardResult, MaybeAsync, NavigationEnd, NavigationStart, RedirectCommand, Router, RouterStateSnapshot } from "@angular/router";
-import { RoutingService } from "../app/services/routing.service";
-import { DsaServerService } from "../app/services/dsa-server.service";
-import { filter, map, Subject, tap } from "rxjs";
-import { HelperService } from "../app/services/helper.service";
+import { ActivatedRouteSnapshot, CanActivate, GuardResult, MaybeAsync, Router, RouterStateSnapshot } from "@angular/router";
 
 @Injectable()
 export class ValidTopicGuard implements CanActivate {

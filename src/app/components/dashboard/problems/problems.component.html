@@ -1,5 +1,5 @@
 @if(_problems().length > 0) {
-<app-chart [aspectRatio]="3/2" [width]="100" [title]="'Progress in ' + topicTitle()"></app-chart>
+<app-chart [aspectRatio]="3/2" [width]="100" [title]="'Progress in ' + _topicWiseProblems().topic"></app-chart>
 <div class="flex mt-4 flex-col justify-end gap-4 sm:flex-row">
   <input
     hlmInput
@@ -83,7 +83,7 @@
   
         Or try mat-select or mat-menu -->
 
-      <!-- <form [formGroup]="statusForm"> -->
+      <!--HINT: <form [formGroup]="statusForm"> -->
         <brn-select
         class="inline-block"
         placeholder="{{ element.status }}"
@@ -102,10 +102,10 @@
   </brn-column-def>
   <brn-column-def name="actions" class="m-2 w-16">
     <hlm-th *brnHeaderDef></hlm-th>
-    <hlm-td *brnCellDef="let element">
+    <hlm-td *brnCellDef="let problem">
       <button
         matTooltip="View Solution"
-        [routerLink]="['problem', element.id]"
+        [routerLink]="['problem', problem.id]"
         hlmBtn
         variant="ghost"
         class="h-6 w-6 p-0.5"

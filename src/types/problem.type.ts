@@ -1,3 +1,9 @@
+
+export type TopicRoute = {
+  path: string;
+  title: string;
+}
+
 export type ProblemStatus = 'solved' | 'attempted' | 'unattempted';
 
 export type Problem = {
@@ -16,33 +22,22 @@ export type StatusModel = {
   status: ProblemStatus;
 };
 
-export interface AdjacentRoutes {
-  prevPrblmId: string;
-  prevTopic: string;
-  nextPrblmId: string;
-  nextTopic: string;
-  curTopic: string;
-}
-
-export interface ProblemRoute extends Problem {
-  adjRoutes: AdjacentRoutes;
-}
-
 export type Solution = {
   approach: 'approach-1' | 'approach-2' | 'approach-3';
   algorithm: string;
   images: string[];
 };
 
-export type ProblemContent = {
-  problem?: Problem;
-  status?: 'loaded' | 'no-data';
-};
+// TODO : Use it if needed in future
+// export type ProblemContent = {
+//   problem?: Problem;
+//   status?: 'loaded' | 'no-data';
+// };
 
   
 export type DSASheet = {
-    topics: string[] | undefined;
-    problems: Problem[] | undefined;
+    topics: string[];
+    problems: Problem[];
   };
 
 

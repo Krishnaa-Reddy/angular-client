@@ -12,14 +12,7 @@ import { HeaderComponent } from './components/core/header/header.component';
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet, HlmButtonDirective,
-    BrnAccordionContentComponent,
-    HlmAccordionDirective,
-    HlmAccordionItemDirective,
-    HlmAccordionTriggerDirective,
-    HlmAccordionContentDirective,
-    HlmAccordionIconDirective,
-    HlmIconComponent,
+    RouterOutlet,
     DashboardComponent,
     HeaderComponent,
     FooterComponent
