@@ -2,16 +2,15 @@ import { NgClass, isPlatformBrowser } from '@angular/common';
 import {
   Component,
   Inject,
-  Input,
   OnInit,
   PLATFORM_ID,
   computed,
   input,
-  signal,
+  signal
 } from '@angular/core';
 import { ChartConfiguration } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import { levels, colors } from '../../../../constants/levels.constant';
+import { colors, levels } from '../../../../constants/levels.constant';
 
 @Component({
   selector: 'app-chart',
@@ -39,7 +38,7 @@ export class ChartComponent implements OnInit {
   total = input<number>(99);
   data = signal<number[]>([324, 34, 345]);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: any) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
   ngOnInit(): void {
     this.isBrowser = isPlatformBrowser(this.platformId);
@@ -48,16 +47,16 @@ export class ChartComponent implements OnInit {
   public doughnutChartLabels: string[] = levels;
 
   public doughnutChartDatasets$ = computed(() => {
-    return <ChartConfiguration<'doughnut'>['data']['datasets']>[
+    return [
       {
         data: this.data(),
         backgroundColor: colors,
       },
-    ];
+    ] as ChartConfiguration<'doughnut'>['data']['datasets'];
   });
 
   public doughnutChartOptions = computed(() => {
-    return <ChartConfiguration<'doughnut'>['options']>{
+    return {
       responsive: false,
       aspectRatio: this.aspectRatio(),
       plugins: {
@@ -65,7 +64,7 @@ export class ChartComponent implements OnInit {
           display: false,
         },
       },
-    };
+    } as ChartConfiguration<'doughnut'>['options'];
   });
 }
 

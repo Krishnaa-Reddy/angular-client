@@ -17,7 +17,6 @@ import { HlmIconComponent, provideIcons } from '@spartan-ng/ui-icon-helm';
 import { HlmSpinnerComponent } from '@spartan-ng/ui-spinner-helm';
 import { AngularSplitModule } from 'angular-split';
 import { DsaServerService } from '../../../services/dsa-server.service';
-import { Problem } from '../../../../types/problem.type';
 
 
 

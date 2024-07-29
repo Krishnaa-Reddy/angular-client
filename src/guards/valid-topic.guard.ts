@@ -5,6 +5,7 @@ import { ActivatedRouteSnapshot, CanActivate, GuardResult, MaybeAsync, Router, R
 export class ValidTopicGuard implements CanActivate {
     private router = inject(Router);
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): MaybeAsync<GuardResult> {
 
         if(route.params['topic-name'] === undefined) {

@@ -1,6 +1,5 @@
 import { Route } from '@angular/router';
 import { ValidTopicGuard } from '../guards/valid-topic.guard';
-import { ProblemsComponent } from './components/dashboard/problems/problems.component';
 
 // lazy-load standalone components
 export const routes: Route[] = [

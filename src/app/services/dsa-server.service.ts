@@ -12,19 +12,16 @@ export class DsaServerService {
 
   private dsa$ = of(DSA_DATA).pipe(
     catchError((_) => of<DSASheet>({ topics: [], problems: [] })),
-    startWith(<DSASheet>{ topics: [], problems: [] })
+    startWith({ topics: [], problems: [] })
   );
 
   _problems = toSignal(this.dsa$.pipe(map((dsa) => dsa.problems)));
 
   _topics = toSignal(
     this.dsa$.pipe(
-      map((dsa) => {
-        return dsa.topics.map(
-          (title) =>
-            <TopicRoute>{ title, path: title.replace(' ', '-').toLowerCase() }
-        );
-      })
+      map((dsa) => dsa.topics
+        .map(title => ({ title, path: title.replace(' ', '-').toLowerCase() } as TopicRoute))
+      )
     )
   );
 
