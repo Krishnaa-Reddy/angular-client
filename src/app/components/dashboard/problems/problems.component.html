@@ -75,29 +75,7 @@
   <brn-column-def name="status" class="m-2 justify-end w-40">
     <hlm-th *brnHeaderDef>Status</hlm-th>
     <hlm-td class="font-medium tabular-nums" *brnCellDef="let element">
-      
-      <!-- TODO -->
-      <!-- The major reason for its failure is, the component is not properly rendered on time.
-        This select component is not avalible even after ngAfterViewInit
-        Need re-struture the code.
-  
-        Or try mat-select or mat-menu -->
-
-      <!--HINT: <form [formGroup]="statusForm"> -->
-        <brn-select
-        class="inline-block"
-        placeholder="{{ element.status }}"
-      >
-        <hlm-select-trigger>
-          <hlm-select-value id="status" />
-        </hlm-select-trigger>
-        <hlm-select-content class="w-56">
-          @for (status of statuses; track $index) {
-          <hlm-option [value]="status">{{ status }}</hlm-option>
-          }
-        </hlm-select-content>
-      </brn-select>
-      <!-- </form> -->'
+      <app-problem-status [status]="{status: element.status, id: element.id}"></app-problem-status>
     </hlm-td>
   </brn-column-def>
   <brn-column-def name="actions" class="m-2 w-16">

@@ -11,7 +11,7 @@ export class DsaServerService {
   _topic = signal<string | undefined>(undefined);
 
   private dsa$ = of(DSA_DATA).pipe(
-    catchError((_) => of<DSASheet>({ topics: [], problems: [] })),
+    catchError(() => of<DSASheet>({ topics: [], problems: [] })),
     startWith({ topics: [], problems: [] })
   );
 

@@ -1,0 +1,10 @@
+<brn-select class="inline-block" [placeholder]="status().status ?? 'NA'" [(ngModel)]="_status">
+  <hlm-select-trigger>
+    <hlm-select-value id="status" />
+  </hlm-select-trigger>
+  <hlm-select-content class="w-56">
+    @for (status of statuses; track $index) {
+    <hlm-option [value]="status">{{ status }}</hlm-option>
+    }
+  </hlm-select-content>
+</brn-select>

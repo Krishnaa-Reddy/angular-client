@@ -41,10 +41,10 @@ import {
 } from '@spartan-ng/ui-table-brain';
 import { HlmTableModule } from '@spartan-ng/ui-table-helm';
 import { debounceTime, map } from 'rxjs';
-import { STATUSES } from '../../../../constants/problems';
 import { Problem } from '../../../../types/problem.type';
 import { DsaServerService } from '../../../services/dsa-server.service';
 import { ChartComponent } from '../../shared/chart/chart.component';
+import { ProblemStatusComponent } from '../problem-status/problem-status.component';
 
 // Most important!!!!!!!!!: Use signals as much as you can
 ///// And, Deplpoy the code first before you plan any new advancements or features
@@ -84,7 +84,8 @@ import { ChartComponent } from '../../shared/chart/chart.component';
     HlmSelectModule,
     MatTooltipModule,
     ReactiveFormsModule,
-    ChartComponent
+    ChartComponent,
+    ProblemStatusComponent
   ],
   providers: [
     provideIcons({
@@ -101,14 +102,13 @@ import { ChartComponent } from '../../shared/chart/chart.component';
 export class ProblemsComponent {
   protected readonly 'topic-name' = input(undefined);
   private readonly _service = inject(DsaServerService);
+  element = "";
 
   protected readonly _rawFilterInput = signal('');
   protected readonly _problemFilter = signal('');
   private readonly _debouncedFilter = toSignal(
     toObservable(this._rawFilterInput).pipe(debounceTime(300))
   );
-
-  protected readonly statuses = STATUSES;
 
   private readonly _displayedIndices = signal({ start: 0, end: 0 });
   protected readonly _availablePageSizes = [5, 10, 20, 100];

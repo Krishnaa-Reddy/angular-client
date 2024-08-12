@@ -54,13 +54,16 @@ export class PendingDevTrackerComponent {
   statusTemplates = statusTemplates;
   protected _tasks: Task[] = [
     { task: "Optimize the dsa-server.service and routing-service", status: 'DONE' },
+    { task: "React to updated status to the specific problem", status: 'TODO' },
+    { task: "Now start the backend work. Bring in the basic endpoints", status: 'TODO' },
+    { task: "Deploy both frontend and backend ASAP", status: 'TODO' },
     { task: "Plan for an unique 'theme' setup with dark mode configurable option", status: 'TODO' },
     { task: "Modify 'header' to look good", status: 'TODO' },
     { task: "Optimize chart-component to use only atmost 1 or 2 signal inputs", status: 'TODO' },
     { task: "Use rxjs combinational operators to simply async operations b/w routes & server-data", status: 'PENDING' },
     { task: "Consider all edge cases for backend, hanlde exceptions", status: 'TODO' },
     { task: "Use types, avoid any - everywhere", status: 'TODO' },
-    { task: "Bring plugins for code-lint and code-formatting", status: 'TODO' },
+    { task: "Bring plugins for code-lint and code-formatting", status: 'DONE' },
     { task: "Make the charts functional", status: 'TODO' },
     { task: "Format the server data - more accesible", status: 'TODO' },
   ];
